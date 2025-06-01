@@ -1,44 +1,59 @@
 package Logic;
 
-import Domain.Cuenta;
-
 /**
  *
  * @author josue
  */
+import DAO.CuentaDAO;
+import Domain.Cuenta;
+
+import java.sql.Connection;
+
 public class LogicCuenta {
-    
-     public boolean depositar(Cuenta cuenta, double monto) {
-        if (monto > 0) {
-            cuenta.depositar(monto);
-            System.out.println("Depósito realizado. Nuevo saldo: " + cuenta.getSaldo());
-            return true;
-        } else {
-            System.out.println("Monto inválido para depósito.");
-            return false;
-        }
+
+    private final CuentaDAO cuentaDAO;
+
+    public LogicCuenta(Connection con) {
+        this.cuentaDAO = new CuentaDAO(con);
     }
 
-    public boolean retirar(Cuenta cuenta, double monto) {
-        if (monto > 0) {
-            boolean exito = cuenta.retirar(monto);
-            if (exito) {
-                System.out.println("Retiro realizado. Nuevo saldo: " + cuenta.getSaldo());
-            } else {
-                System.out.println("Fondos insuficientes.");
-            }
-            return exito;
-        } else {
-            System.out.println("Monto inválido para retiro.");
-            return false;
-        }
-    }
-    
-    public double consultarSaldo(Cuenta cuenta) {
-        return cuenta.getSaldo();
+    public boolean depositar(String numeroCuenta, double monto) throws Exception {
+        if (monto <= 0) return false;
+
+        Cuenta cuenta = cuentaDAO.buscarPorNumeroCuenta(numeroCuenta);
+        if (cuenta == null) return false;
+
+        cuenta.depositar(monto);
+        cuentaDAO.actualizar(cuenta);
+        return true;
     }
 
-    public boolean verificarNip(Cuenta cuenta, int nipIngresado) {
-        return cuenta.getNip() == nipIngresado;
+    public boolean retirar(String numeroCuenta, double monto) throws Exception {
+        if (monto <= 0) return false;
+
+        Cuenta cuenta = cuentaDAO.buscarPorNumeroCuenta(numeroCuenta);
+        if (cuenta == null) return false;
+
+        boolean exito = cuenta.retirar(monto);
+        if (exito) {
+            cuentaDAO.actualizar(cuenta);
+        }
+        return exito;
+    }
+
+    public boolean transferir(String origenCuenta, String destinoCuenta, double monto) throws Exception {
+        if (monto <= 0) return false;
+
+        Cuenta origen = cuentaDAO.buscarPorNumeroCuenta(origenCuenta);
+        Cuenta destino = cuentaDAO.buscarPorNumeroCuenta(destinoCuenta);
+
+        if (origen == null || destino == null) return false;
+
+        if (!origen.retirar(monto)) return false;
+
+        destino.depositar(monto);
+        cuentaDAO.actualizar(origen);
+        cuentaDAO.actualizar(destino);
+        return true;
     }
 }
