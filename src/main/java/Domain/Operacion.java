@@ -10,8 +10,8 @@ import java.util.UUID;
 public class Operacion {
 
     private UUID id;
-    private TipoOperacion tipo; 
-    private Cuenta cuenta;      
+    private TipoOperacion tipo;
+    private Cuenta cuenta;
     private double monto;
     private Date fecha;
     private Cuenta cuentaDestino;
@@ -21,7 +21,7 @@ public class Operacion {
         this.tipo = tipo;
         this.cuenta = cuenta;
         this.monto = monto;
-        this.fecha = new Date(); 
+        this.fecha = new Date();
         this.cuentaDestino = null;
     }
 
@@ -33,33 +33,18 @@ public class Operacion {
         this.monto = monto;
         this.fecha = new Date();
     }
-    
-    public UUID getId() {
-        return id;
-    }
 
-    public TipoOperacion getTipo() {
-        return tipo;
-    }
+    public UUID getId() { return id; }
 
-    public Cuenta getCuenta() {
-        return cuenta;
-    }
+    public TipoOperacion getTipo() { return tipo; }
 
-    public double getMonto() {
-        return monto;
-    }
+    public Cuenta getCuenta() { return cuenta; }
 
-    public Date getFecha() {
-        return fecha;
-    }
+    public double getMonto() { return monto; }
 
-    public Cuenta getCuentaDestino() {
-        return cuentaDestino;
-    }
+    public Date getFecha() { return fecha; }
 
-    public void setCuentaDestino(Cuenta cuentaDestino) {
-        this.cuentaDestino = cuentaDestino;
-    }
+    public Cuenta getCuentaDestino() { return cuentaDestino; }
+
+    public void setCuentaDestino(Cuenta cuentaDestino) { this.cuentaDestino = cuentaDestino; }
 }
-
