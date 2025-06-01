@@ -16,7 +16,7 @@ public class CajeroDAO {
 
     public List<Cajero> listarPorBancoId(UUID bancoId) throws SQLException {
         List<Cajero> cajeros = new ArrayList<>();
-        String query = "SELECT * FROM cajero WHERE banco_id = ?";
+        String query = "SELECT * FROM Cajero WHERE banco_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, bancoId.toString());
             ResultSet rs = stmt.executeQuery();
@@ -37,7 +37,7 @@ public class CajeroDAO {
     }
 
     public void insertar(Cajero cajero, UUID bancoId) throws SQLException {
-        String query = "INSERT INTO cajero (id, banco_id, ocupado, monto) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Cajero (id, banco_id, ocupado, monto) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, cajero.getId().toString());
             stmt.setString(2, bancoId.toString());
@@ -48,7 +48,7 @@ public class CajeroDAO {
     }
 
     public void actualizarOcupado(Cajero cajero) throws SQLException {
-        String query = "UPDATE cajero SET ocupado = ?, monto = ? WHERE id = ?";
+        String query = "UPDATE Cajero SET ocupado = ?, monto = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setBoolean(1, cajero.isOcupado());
             stmt.setDouble(2, cajero.getMonto());

@@ -9,11 +9,11 @@ public class BancoDAO {
     private Connection connection;
 
     public BancoDAO(Connection connection) {
-        this.connection = connection;
+        this.connection = Conexion.conectar();
     }
 
     public Banco buscarPorId(UUID id) throws SQLException {
-        String query = "SELECT * FROM bancos WHERE id = ?";
+        String query = "SELECT * FROM Banco WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, id.toString());
             ResultSet rs = stmt.executeQuery();
@@ -26,7 +26,7 @@ public class BancoDAO {
     }
 
     public void insertar(Banco banco) throws SQLException {
-        String query = "INSERT INTO bancos (id, presupuesto) VALUES (?, ?)";
+        String query = "INSERT INTO Banco (id, presupuesto) VALUES (?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, banco.getId().toString());
             stmt.setDouble(2, banco.getPresupuesto());
@@ -35,7 +35,7 @@ public class BancoDAO {
     }
 
     public void actualizarPresupuesto(Banco banco) throws SQLException {
-        String query = "UPDATE bancos SET presupuesto = ? WHERE id = ?";
+        String query = "UPDATE Banco SET presupuesto = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setDouble(1, banco.getPresupuesto());
             stmt.setString(2, banco.getId().toString());
@@ -44,7 +44,7 @@ public class BancoDAO {
     }
 
     public void disminuirPresupuesto(double monto) throws SQLException {
-        String query = "UPDATE bancos SET presupuesto = presupuesto - ? WHERE presupuesto >= ?";
+        String query = "UPDATE Banco SET presupuesto = presupuesto - ? WHERE presupuesto >= ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setDouble(1, monto);
             stmt.setDouble(2, monto);

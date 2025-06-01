@@ -13,18 +13,31 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexion {
-    private static final String URL = "jdbc:mysql://localhost:3306/atm";
+    private static final String URL = "jdbc:mariadb://localhost:3306/atm";
     private static final String USER = "root";
     private static final String PASSWORD = "warrior24";
 
-    public static Connection conectar() {
+    public static Connection getConnection() {
         try {
-            Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Conexión exitosa");
-            return con;
+            Class.forName("org.mariadb.jdbc.Driver"); // <- Esto es CRUCIAL
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            System.err.println("⚠️ Driver no encontrado: " + e.getMessage());
         } catch (SQLException e) {
-            System.out.println("Error de conexión: " + e.getMessage());
-            return null;
+            System.err.println("⚠️ Error al conectar: " + e.getMessage());
         }
+        return null;
+    }
+
+ public static Connection conectar() {
+        try {
+            Class.forName("org.mariadb.jdbc.Driver"); // <- Esto es CRUCIAL
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            System.err.println("⚠️ Driver no encontrado: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("⚠️ Error al conectar: " + e.getMessage());
+        }
+        return null;
     }
 }
